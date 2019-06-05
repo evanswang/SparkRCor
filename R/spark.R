@@ -1,7 +1,8 @@
 library(SparkR)
-setwd('/data/')
+sparkR.session(master = "spark://spark1:7077", sparkConfig = list(spark.driver.memory = "8g")) 
+#, sparkEnvir = list(spark.driver.memory="2g",)
+#setwd('/data/')
 Sys.setenv('SPARKR_SUBMIT_ARGS'='"--packages" "com.databricks:spark-csv_2.10:1.2.0" "sparkr-shell"')
-sqlContext <- sparkRSQL.init(sc)
 
 # [input] set work number
 nodesNum <- as.numeric(Sys.getenv(c("NODE_NUM")))
