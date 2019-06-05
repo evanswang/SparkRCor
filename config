@@ -1,0 +1,14 @@
+# number of virtual workers
+NODE_NUM=24
+
+# input csv file absolute path.
+# the input file should be a comma separated double data matrix.
+# each row is a vector to be compared.
+INPUT=/nfs/data/559row.csv
+SAMPLE_NUM=559
+
+# tmp data folder
+TMP=/nfs/tmp
+
+# vm names
+HOSTS=(spark1 spark2 spark3 spark4)
