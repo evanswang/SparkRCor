@@ -1,6 +1,14 @@
 #!/bin/bash
+###################################################################################
+# Name : add_floating_ip
+# Author: sw23
+# Date: 13 Mar 2019
+# Function : add_floating_ip to vms.
+###################################################################################
 
-PWD=`pwd`
+source ${SPARKRCOR_HOME}/config
+
+PWD=${SPARKRCOR_HOME}/bin/deploy
 
 TOKEN=`cat ${PWD}/token`
  

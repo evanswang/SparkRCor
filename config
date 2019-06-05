@@ -1,14 +1,44 @@
 # number of virtual workers
-NODE_NUM=24
+export NODE_NUM=24
 
 # input csv file absolute path.
 # the input file should be a comma separated double data matrix.
 # each row is a vector to be compared.
-INPUT=/nfs/data/559row.csv
-SAMPLE_NUM=559
+export INPUT=/nfs/data/559row.csv
+export SAMPLE_NUM=559
+export PROBE_NUM=54675
+export BLOCK_SIZE=$((${SAMPLE_NUM} / ${NODE_NUM} + 1))
+export CALC_NUM=$((${BLOCK_SIZE} * ${NODE_NUM}))
 
 # tmp data folder
-TMP=/nfs/tmp
+export TMP=/nfs/tmp
 
-# vm names
-HOSTS=(spark1 spark2 spark3 spark4)
+# tmp data DATA_FILE_PREFIX
+export DATA_FILE_PRE=/nfs/tmp/block_
+
+# result data prefix
+export RES_FILE_PRE=/nfs/results/block
+
+# vm names, the first host name must be spark1
+export HOSTS=(spark1 spark2)
+
+# openstack user
+export USER=sw23
+
+# openstack passwd
+export PASSWD=Wsc.19840703
+
+# spark image id
+export TEMPT_ID=104e5573-bbc7-4583-8f71-1f39e5775534
+
+# spark vm instance resources, such as CPU and memory
+export FLAVOR=8103
+
+# spark vm intranet uuid
+export NET_ID=d0607c1a-02ff-45a9-8b11-b289ed224100
+
+# spark vm SECURITY_GROUP name
+export SECURITY_GROUP=cloudforms_ext_in
+
+# spark vm key pair name
+export KEY=spark_key

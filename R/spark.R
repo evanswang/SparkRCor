@@ -4,19 +4,19 @@ Sys.setenv('SPARKR_SUBMIT_ARGS'='"--packages" "com.databricks:spark-csv_2.10:1.2
 sqlContext <- sparkRSQL.init(sc)
 
 # [input] set work number
-nodesNum <- 24
+nodesNum <- as.numeric(Sys.getenv(c("NODE_NUM")))
 averFloor <- floor((nodesNum + 1)/2)
 averCeiling <- ceiling((nodesNum + 1)/2)
 # [input] set sample number
-patientNum <- 576
+patientNum <- as.numeric(Sys.getenv(c("CALC_NUM")))
 # [input] set probe number
-probesNum <- 54675
+probesNum <- as.numeric(Sys.getenv(c("PROBE_NUM")))
 bufSize <- ceiling(patientNum / nodesNum)
 cormethod <- "pearson"
 lastoneNum <- patientNum - (nodesNum - 1) * bufSize
 # [input] set data location with prefix
-dataFile <- "/nfs/data/block_"
-resultFile <- "/nfs/results/block"
+dataFile <- Sys.getenv(c("DATA_FILE_PRE"))
+resultFile <- Sys.getenv(c("RES_FILE_PRE"))
 
 geneCor <- function(x) {
 		x <- as.numeric(x)

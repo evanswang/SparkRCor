@@ -5,7 +5,6 @@ source ${SPARKRCOR_HOME}/config
 
 echo ${NODE_NUM}
 echo ${INPUT}
-BLOCK_SIZE=$((${SAMPLE_NUM} / ${NODE_NUM} + 1))
 
 # split data by virtual worker number
 split -d -l ${BLOCK_SIZE} ${INPUT} ${TMP}/block_

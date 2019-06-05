@@ -8,6 +8,7 @@ csvtool
 split
 spark-2.3.3-bin-hadoop2.7
 nfs
+python3
 
 # Environment variables
-The SPARKRCOR_HOME should be set to your local path in .bashrc or .bash_profile. All the other input parameters are stored in the config file.
+The SPARKRCOR_HOME and input parameters in the config file should be set to your local path in .bashrc or .bash_profile.

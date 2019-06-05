@@ -47,60 +47,21 @@ fi
 # create vms
 ###################################
 rm -fr ${PWD}/vmlist.txt
-RET_CODE=$?
-if [ "$RET_CODE" -ne 0 ];
-then
-	echo "!!!Error!!!"
-	echo "rm -fr ${PWD}/vmlist.txt"
-	echo "!!!Error!!!"
-	echo
-	exit 1
-fi
 
-${PWD}/create_vm.sh ${HOSTS[0]} >> ${PWD}/vmlist.txt
-RET_CODE=$?
-if [ "$RET_CODE" -ne 0 ];
-then
-	echo "!!!Error!!!"
-	echo "${PWD}/create_vm.sh ${HOSTS[0]} >> ${PWD}/vmlist.txt"
-	echo "!!!Error!!!"
-	echo
-	exit 1
-fi
-
-${PWD}/create_vm.sh ${HOSTS[1]} >> ${PWD}/vmlist.txt
-RET_CODE=$?
-if [ "$RET_CODE" -ne 0 ];
-then
-	echo "!!!Error!!!"
-	echo "${PWD}/create_vm.sh ${HOSTS[1]} >> ${PWD}/vmlist.txt"
-	echo "!!!Error!!!"
-	echo
-	exit 1
-fi
-
-${PWD}/create_vm.sh ${HOSTS[2]} >> ${PWD}/vmlist.txt
-RET_CODE=$?
-if [ "$RET_CODE" -ne 0 ];
-then
-	echo "!!!Error!!!"
-	echo "${PWD}/create_vm.sh ${HOSTS[2]} >> ${PWD}/vmlist.txt"
-	echo "!!!Error!!!"
-	echo
-	exit 1
-fi
-
-${PWD}/create_vm.sh ${HOSTS[3]} >> ${PWD}/vmlist.txt
-RET_CODE=$?
-if [ "$RET_CODE" -ne 0 ];
-then
-	echo "!!!Error!!!"
-	echo "${PWD}/create_vm.sh ${HOSTS[3]} >> ${PWD}/vmlist.txt"
-	echo "!!!Error!!!"
-	echo
-	exit 1
-fi
-
+for((i=0;i<$((${#HOSTS[@]}));i++))
+do
+	echo ${HOSTS[${i}]}
+	${PWD}/create_vm.sh ${HOSTS[${i}]} >> ${PWD}/vmlist.txt
+	RET_CODE=$?
+	if [ "$RET_CODE" -ne 0 ];
+	then
+		echo "!!!Error!!!"
+		echo "${PWD}/create_vm.sh ${HOSTS[${i}]} >> ${PWD}/vmlist.txt"
+		echo "!!!Error!!!"
+		echo
+		exit 1
+	fi
+done
 
 ###################################
 # bind floating ips to fixed ips
@@ -108,7 +69,7 @@ fi
 
 IPID=0
 
-rm -fr fixed_iplist.txt
+rm -fr ${PWD}/fixed_iplist.txt
 
 for VMID in `cat ${PWD}/vmlist.txt`
 do
@@ -132,7 +93,7 @@ do
 	done
 	echo
 	echo ${FIXED_IP}
-	echo ${FIXED_IP} >> fixed_iplist.txt
+	echo ${FIXED_IP} >> ${PWD}/fixed_iplist.txt
 	echo ${IPARRAY[${IPID}]}
 	${PWD}/add_floating_ip.sh ${IPARRAY[${IPID}]} ${FIXED_IP} ${VMID}
 	RET_CODE=$?
@@ -162,13 +123,6 @@ then
 	echo
 	exit 1
 fi
-
-###################################
-# debug setting
-# COMMENT BEFORE run.sh
-#IPID=2
-###################################
-
 
 ###################################
 # init hostnames and slaves
@@ -260,6 +214,24 @@ ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/spark-2.3.3-bin-had
 ###################################
 #ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/sbin/stop-dfs.sh"
 
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'FIXIPARRAY=($(cat $PWD/fixed_iplist.txt))'
+RET_CODE=$?
+if [ "$RET_CODE" -ne 0 ];
+then
+	echo "!!!Error!!!"
+	echo "FIXIPARRAY"
+	echo "!!!Error!!!"
+	echo
+	exit 1
+fi
+
+for((i=0;i<$((${#HOSTS[@]}));i++))
+do
+	echo ${HOSTS[${i}]}
+	echo ${FIXIPARRAY[${i}]}
+	echo "${FIXIPARRAY[${i}]} ${HOSTS[${i}]}" | sudo tee -a /etc/hosts
+done
+
 # TODO for image
 # 1. remove ip in /etc/hosts
 # 2. add .ssh/config to disable known_hosts
@@ -270,5 +242,5 @@ ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/spark-2.3.3-bin-had
 # 7. remove slave hostnames in /opt/hadoop-2.7.3/etc/hadoop
 # 8. clean /data
 # 9. add ssh key to .ssh/
-# 10. change client config
+# 10. change client config to connect spark, add hosts to /etc/hosts, add hosts to spark conf
 # 11. remove hadoop config to enable nfs

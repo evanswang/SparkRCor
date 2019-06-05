@@ -1,4 +1,14 @@
 #!/bin/bash
+###################################################################################
+# Name : get openstack token using user and passwd
+# Author: sw23
+# Date: 13 Mar 2019
+# Function : get openstack token using user and passwd. Please fill your openstack
+#            USER and PASSWD in the config file.
+###################################################################################
+
+
+source ${SPARKRCOR_HOME}/config
 
 PWD=${SPARKRCOR_HOME}/bin/deploy
 
@@ -12,9 +22,9 @@ TOKEN=`curl -i \
       "methods": ["password"],
       "password": {
         "user": {
-          "name": "youruser",
+          "name": "'${USER}'",
           "domain": { "id": "default" },
-          "password": "yourpass"
+          "password": "'${PASSWD}'"
         }
       }
     },
