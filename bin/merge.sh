@@ -18,15 +18,23 @@ done
 
 for((i=0;i<$((${NODE_NUM}));i++))
 do
-  for((j=0;j<$((${NODE_NUM}));j++))
-  do
-    cat ${RES}/block_${i}_${j} >> ${RES}/block_${i}
-  done
+  #for((j=0;j<$((${NODE_NUM}));j++))
+  #do
+  #  cat ${RES}/block_${i}_${j} >> ${RES}/block_${i}
+  #done
+  ${SPARKRCOR_HOME}/bin/sub_merge.sh ${i} &
 done
 
-for((i=0;i<$((${NODE_NUM}));i++))
-do
-  csvtool transpose ${RES}/block_${i} > ${RES}/res_${i}
+#for((i=0;i<$((${NODE_NUM}));i++))
+#do
+#  csvtool transpose ${RES}/block_${i} > ${RES}/res_${i}
+#done
+
+while true; do
+	PNUM=`ps aux | grep sub_merge | wc -l`
+	if [ ${PNUM} -lt 2 ]; then
+		break;
+	fi
 done
 
 for((i=0;i<$((${NODE_NUM}));i++))

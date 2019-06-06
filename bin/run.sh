@@ -8,17 +8,16 @@ rm -fr ${RES}
 mkdir -p ${TMP}
 mkdir -p ${RES}
 
-${SPARKRCOR_HOME}/bin/prepare.sh
+time ${SPARKRCOR_HOME}/bin/prepare.sh
 
 #/opt/spark-2.3.3-bin-hadoop2.7/bin/sparkR --master spark://spark1:7077 --packages com.databricks:spark-csv_2.11:1.5.0 --driver-memory 8g --executor-memory 7g  --executor-cores 7
 
-# TODO: write this to a sh and run sh in the master node
+# run sh in the master node (spark1)
 rm -fr ${TMP}/run.sh
 echo "export SPARKRCOR_HOME=${SPARKRCOR_HOME}" >> ${TMP}/run.sh
 echo 'source ${SPARKRCOR_HOME}/config' >> ${TMP}/run.sh
 echo "/opt/spark-2.3.3-bin-hadoop2.7/bin/spark-submit /nfs/SparkRCor/R/spark.R --master spark://spark1:7077" >> ${TMP}/run.sh
 chmod +x ${TMP}/run.sh
-
 ssh spark1 ${TMP}/run.sh
 
 #/opt/spark-2.3.3-bin-hadoop2.7/bin/spark-submit /nfs/SparkRCor/R/spark.R --master spark://spark1:7077 --packages com.databricks:spark-csv_2.11:1.5.0 --driver-memory 8g --executor-memory 7g  --executor-cores 7
