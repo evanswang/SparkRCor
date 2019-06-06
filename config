@@ -1,5 +1,5 @@
 # number of virtual workers
-export NODE_NUM=36
+export NODE_NUM=48
 
 # input csv file absolute path.
 # the input file should be a comma separated double data matrix.
@@ -23,7 +23,7 @@ export RES=/nfs/results
 export RES_FILE_PRE=/nfs/results/block
 
 # vm names, the first host name must be spark1
-export HOSTS=(spark1 spark2)
+export HOSTS=(spark1 spark2 spark3 spark4 spark5 spark6)
 
 # openstack user
 export USER=sw23
@@ -32,10 +32,11 @@ export USER=sw23
 export PASSWD=8abf50cf557512368d7e8384c3513508
 
 # spark image id
-export TEMPT_ID=104e5573-bbc7-4583-8f71-1f39e5775534
+export TEMPT_ID=4700d6e8-882b-421e-ad55-cf5152486cfe
 
 # spark vm instance resources, such as CPU and memory
-export FLAVOR=8103
+#export FLAVOR=8103
+export FLAVOR=8104
 
 # spark vm intranet uuid
 export NET_ID=d0607c1a-02ff-45a9-8b11-b289ed224100

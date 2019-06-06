@@ -167,11 +167,19 @@ do
 		echo ${HOSTS[$j]}
 		echo
 		ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[$i]} "echo '${HOSTS[$j]}' | tee -a /opt/spark-2.3.3-bin-hadoop2.7/conf/slaves"
+		if [ "$RET_CODE" -ne 0 ];
+		then
+			echo "!!!Error!!!"
+			echo "init spark slaves"
+			echo "!!!Error!!!"
+			echo
+			exit 1
+		fi
 		ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[$i]} "echo '${HOSTS[$j]}' | tee -a /opt/hadoop-2.7.3/etc/hadoop/slaves"
 		if [ "$RET_CODE" -ne 0 ];
 		then
 			echo "!!!Error!!!"
-			echo "init slaves"
+			echo "init hadoop slaves"
 			echo "!!!Error!!!"
 			echo
 			exit 1
@@ -182,12 +190,12 @@ done
 ###################################
 # format HDFS
 ###################################
-ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/bin/hadoop namenode -format"
+#ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/bin/hadoop namenode -format"
 
 ###################################
 # start HDFS
 ###################################
-ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/sbin/start-dfs.sh"
+#ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/sbin/start-dfs.sh"
 
 ###################################
 # start master
@@ -214,6 +222,9 @@ ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/spark-2.3.3-bin-had
 ###################################
 #ssh -o "StrictHostKeyChecking no" ubuntu@${IPARRAY[0]} "/opt/hadoop-2.7.3/sbin/stop-dfs.sh"
 
+###################################
+# add host names to client
+###################################
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'FIXIPARRAY=($(cat $PWD/fixed_iplist.txt))'
 RET_CODE=$?
 if [ "$RET_CODE" -ne 0 ];
@@ -230,7 +241,31 @@ do
 	echo ${HOSTS[${i}]}
 	echo ${FIXIPARRAY[${i}]}
 	echo "${FIXIPARRAY[${i}]} ${HOSTS[${i}]}" | sudo tee -a /etc/hosts
+	if [ "$RET_CODE" -ne 0 ];then
+		echo "!!!Error!!!"
+		echo "add host names to client"
+		echo "!!!Error!!!"
+		echo
+		exit 1
+	fi
 done
+
+###################################
+# mount nfs to cluster
+###################################
+for((i=0;i<$((${#HOSTS[@]}));i++))
+do
+	ssh ${HOSTS[${i}]} sudo umount /nfs
+	ssh ${HOSTS[${i}]} sudo mount 192.168.0.21:/nfs /nfs
+	if [ "$RET_CODE" -ne 0 ];then
+		echo "!!!Error!!!"
+		echo "mount nfs to cluster"
+		echo "!!!Error!!!"
+		echo
+		exit 1
+	fi
+done
+
 
 # TODO for image
 # 1. remove ip in /etc/hosts
@@ -244,3 +279,4 @@ done
 # 9. add ssh key to .ssh/
 # 10. change client config to connect spark, add hosts to /etc/hosts, add hosts to spark conf
 # 11. remove hadoop config to enable nfs
+# 12. csvtool and python3
