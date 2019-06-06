@@ -16,6 +16,9 @@ export TMP=/nfs/tmp
 # tmp data DATA_FILE_PREFIX
 export DATA_FILE_PRE=/nfs/tmp/block_
 
+# result folder
+export RES=/nfs/results
+
 # result data prefix
 export RES_FILE_PRE=/nfs/results/block
 
@@ -26,7 +29,7 @@ export HOSTS=(spark1 spark2)
 export USER=sw23
 
 # openstack passwd
-export PASSWD=Wsc.19840703
+export PASSWD=8abf50cf557512368d7e8384c3513508
 
 # spark image id
 export TEMPT_ID=104e5573-bbc7-4583-8f71-1f39e5775534

@@ -1,32 +1,39 @@
-#!bin/bash
-NUM=559
+#!/bin/bash
+###################################################################################
+# Name : merge
+# Author: sw23
+# Date: 1 Jun 2019
+# Function : merge result sub-matrices.
+###################################################################################
 
-for((i=0;i<24;i++))
+source ${SPARKRCOR_HOME}/config
+
+for((i=0;i<$((${NODE_NUM}));i++))
 do
-  for((j=0;j<24;j++))
+  for((j=0;j<$((${NODE_NUM}));j++))
   do
-    ln -s block_${i}_${j} block_${j}_${i} 
+    ln -s ${RES}/block_${i}_${j} ${RES}/block_${j}_${i} 
   done
 done
 
-for((i=0;i<24;i++))
+for((i=0;i<$((${NODE_NUM}));i++))
 do
-  for((j=0;j<24;j++))
+  for((j=0;j<$((${NODE_NUM}));j++))
   do
-    cat block_${i}_${j} >>  block_${i}
+    cat ${RES}/block_${i}_${j} >> ${RES}/block_${i}
   done
 done
 
-for((i=0;i<24;i++))
+for((i=0;i<$((${NODE_NUM}));i++))
 do
-  csvtool transpose block_${i} > res_${i}
+  csvtool transpose ${RES}/block_${i} > ${RES}/res_${i}
 done
 
-for((i=0;i<24;i++))
+for((i=0;i<$((${NODE_NUM}));i++))
 do
-  cat res_${i} >> res
+  cat ${RES}/res_${i} >> ${RES}/res
 done
 
-head -n ${NUM} res > res_tmp
+head -n ${SAMPLE_NUM} ${RES}/res > ${RES}/res_tmp
 
-csvtool setcolumns ${NUM} res_tmp > res_final
+csvtool setcolumns ${SAMPLE_NUM} ${RES}/res_tmp > ${RES}/res_final

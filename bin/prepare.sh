@@ -1,5 +1,4 @@
 #!/bin/bash
-echo ${SPARKRCOR_HOME}
 
 source ${SPARKRCOR_HOME}/config
 
