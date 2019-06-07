@@ -26,11 +26,13 @@ Manually start a client VM in OpenStack and mount the NFS server to the client. 
 
 # Quick Start
 ## Deploy Spark Cluster
-
+``` sh
 ${SPARKRCOR_HOME}/bin/deploy/run.sh
+```
 
 ## Start correlation calculation job
-
+``` sh
 ${SPARKRCOR_HOME}/bin/run.sh
+```
 
 The result matrix is stored in the file ${RES}/res_final.
