@@ -31,6 +31,8 @@ ssh spark1 ${TMP}/run.sh
 
 #/opt/spark-2.3.3-bin-hadoop2.7/bin/sparkR CMD BATCH /nfs/SparkRCor/R/spark.R --master yarn --driver-memory 6g --executor-memory 6g  --executor-cores 6
 
+rm -fr ${TMP}/block*
+
 rm -fr ${TMP}/merge.sh
 echo "export SPARKRCOR_HOME=${SPARKRCOR_HOME}" >> ${TMP}/merge.sh
 echo 'source ${SPARKRCOR_HOME}/config' >> ${TMP}/merge.sh

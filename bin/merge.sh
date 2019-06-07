@@ -37,6 +37,8 @@ while true; do
 	fi
 done
 
+rm -f ${RES}/block*
+
 for((i=0;i<$((${NODE_NUM}));i++))
 do
   cat ${RES}/res_${i} >> ${RES}/res
@@ -44,4 +46,8 @@ done
 
 head -n ${SAMPLE_NUM} ${RES}/res > ${RES}/res_tmp
 
-csvtool setcolumns ${SAMPLE_NUM} ${RES}/res_tmp > ${RES}/res_final
+rm -f ${RES}/res
+
+csvtool setcolumns ${SAMPLE_NUM} ${RES}/res_tmp > ${RES}/res
+
+rm -f ${RES}/res_tmp
