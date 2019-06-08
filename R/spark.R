@@ -31,7 +31,7 @@ geneCor <- function(x) {
 				matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
 				write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), ], file = paste(resultFile, x, x + j - 1, sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 			}
-			return(matTo)
+			return(0)
 		}
 	
 		else if (x >= averFloor - 1 && x <= averCeiling - 1) {
@@ -50,7 +50,7 @@ geneCor <- function(x) {
 				}
 				
 			}
-			return(matTo)
+			return(0)
 		}
 		
 		else if (x > averCeiling - 1) {
@@ -77,7 +77,7 @@ geneCor <- function(x) {
 					write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), ], file = paste(resultFile, x, (x + j - 1) %% (nodesNum), sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				}				
 			}
-			return(matTo)
+			return(0)
 		}
 }
 
