@@ -41,12 +41,12 @@ rm -f ${RES}/block*
 
 for((i=0;i<$((${NODE_NUM}));i++))
 do
-  cat ${RES}/res_${i} >> ${RES}/res
+  cat ${RES}/res_${i} >> ${RES}/res_raw
 done
 
-head -n ${SAMPLE_NUM} ${RES}/res > ${RES}/res_tmp
+head -n ${SAMPLE_NUM} ${RES}/res_raw > ${RES}/res_tmp
 
-rm -f ${RES}/res
+rm -f ${RES}/res_raw
 
 csvtool setcolumns ${SAMPLE_NUM} ${RES}/res_tmp > ${RES}/res
 
