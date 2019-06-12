@@ -1,14 +1,12 @@
 #!/bin/bash
 ###################################################################################
-# Name : merge
+# Name : a function for the merge.sh
 # Author: sw23
 # Date: 1 Jun 2019
 # Function : merge result sub-matrices.
 ###################################################################################
 
 source ${SPARKRCOR_HOME}/config
-
-# 51s
 
 for((j=0;j<$((${NODE_NUM}));j++))
 do
