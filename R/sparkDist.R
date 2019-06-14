@@ -1,5 +1,5 @@
 library(SparkR)
-sparkR.session(master = "spark://spark1:7077", sparkConfig = list(spark.r.backendConnectionTimeout = "60000"))
+sparkR.session(master = "spark://spark1:7077", sparkConfig = list(spark.driver.memory = "8g")) 
 #, sparkEnvir = list(spark.driver.memory="2g",)
 #setwd('/data/')
 Sys.setenv('SPARKR_SUBMIT_ARGS'='"--packages" "com.databricks:spark-csv_2.10:1.2.0" "sparkr-shell"')
@@ -13,15 +13,13 @@ patientNum <- as.numeric(Sys.getenv(c("CALC_NUM")))
 # [input] set probe number
 probesNum <- as.numeric(Sys.getenv(c("PROBE_NUM")))
 bufSize <- ceiling(patientNum / nodesNum)
-cormethod <- "pearson"
-#cormethod <- "spearman"
-#cormethod <- "kendall"
 lastoneNum <- patientNum - (nodesNum - 1) * bufSize
 # [input] set data location with prefix
 dataFile <- Sys.getenv(c("DATA_FILE_PRE"))
 resultFile <- Sys.getenv(c("RES_FILE_PRE"))
 
 geneCor <- function(x) {
+		library(fields)
 		x <- as.numeric(x)
 		if (x < averFloor - 1) {
 			matFrom <- matrix( scan( paste(dataFile, x, sep=""), skip=0, sep=',' ), ncol=probesNum, byrow=TRUE )
@@ -30,7 +28,7 @@ geneCor <- function(x) {
 			for (j in 1:averCeiling) {
 				#print(j)
 				matTmp <- matrix( scan( paste(dataFile, x + j - 1, sep=""), skip=0, sep=',' ), ncol=probesNum, byrow=TRUE )
-				matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
+				matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- rdist(matFrom, matTmp)
 				write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), ], file = paste(resultFile, x, x + j - 1, sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 			}
 			return(0)
@@ -44,10 +42,10 @@ geneCor <- function(x) {
 				#print(j)
 				matTmp <- matrix( scan( paste(dataFile, x + j - 1, sep=""), skip=0, sep=',' ), ncol=probesNum, byrow=TRUE )
 				if ((x + j) * bufSize + 1 > patientNum) {
-					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ], file = paste(resultFile, x, x + j - 1, sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				} else {
-					matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), ], file = paste(resultFile, x, x + j - 1, sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				}
 				
@@ -66,16 +64,16 @@ geneCor <- function(x) {
 				
 				matTmp <- matrix( scan( paste(dataFile, (x + j - 1) %% (nodesNum), sep=""), skip=0, sep=',' ), ncol=probesNum, byrow=TRUE )
 				if (condTo && condFrom) {			
-					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), 1 : lastoneNum] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), 1 : lastoneNum] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), 1 : lastoneNum], file = paste(resultFile, x, (x + j - 1) %% (nodesNum), sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				} else if (condTo && !condFrom) {
-					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : ((j - 1) * bufSize + lastoneNum), ], file = paste(resultFile, x, (x + j - 1) %% (nodesNum), sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				} else if (!condTo && condFrom) {
-					matTo[((j - 1) * bufSize + 1) : (j * bufSize), 1 : lastoneNum] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : (j * bufSize), 1 : lastoneNum] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), 1 : lastoneNum], file = paste(resultFile, x, (x + j - 1) %% (nodesNum), sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				} else {
-					matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- cor(t(matFrom), t(matTmp), method=cormethod)
+					matTo[((j - 1) * bufSize + 1) : (j * bufSize), ] <- rdist(matFrom, matTmp)
 					write.table(matTo[((j - 1) * bufSize + 1) : (j * bufSize), ], file = paste(resultFile, x, (x + j - 1) %% (nodesNum), sep="_"), row.names = FALSE, col.names = FALSE, sep = ",")
 				}				
 			}

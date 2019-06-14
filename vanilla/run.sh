@@ -1,7 +1,7 @@
 #!/bin/bash
 # This is just a benchmark baseline for performance test, not part of the SparkRCor pipeline.
 
-for((i=1000;i<40001;i=i+1000))
+for((i=1000;i<10001;i=i+1000))
 do
 	echo $i
 	rm -fr /nfs/data/*

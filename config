@@ -1,11 +1,11 @@
 # number of virtual workers
-export NODE_NUM=80
+export NODE_NUM=64
 
 # input csv file absolute path.
 # the input file should be a comma separated double data matrix.
 # each row is a vector to be compared.
-export INPUT=/nfs/data/3000row.csv
-export SAMPLE_NUM=3000
+export INPUT=/nfs/data/1000row.csv
+export SAMPLE_NUM=1000
 export PROBE_NUM=54675
 BLOCK_SIZE=$((${SAMPLE_NUM} / ${NODE_NUM}))
 
