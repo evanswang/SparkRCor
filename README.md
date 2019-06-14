@@ -37,4 +37,4 @@ ${SPARKRCOR_HOME}/bin/deploy/run.sh
 ${SPARKRCOR_HOME}/bin/run.sh
 ```
 
-The result matrix is stored in the file ${RES}/res_final.
+The result matrix is stored in the file ${RES}/res.
