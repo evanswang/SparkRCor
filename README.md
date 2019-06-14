@@ -15,6 +15,8 @@ nfs-common
 
 python3
 
+R fields package (optional for Euclidean distance computation only)
+
 ## Environment variables
 Please change the environment variables for your own OpenStack environment in the file config. The example config file is based on FCA (eta version) in Wellcome Trust Sanger Institute. The SPARKRCOR_HOME and input parameters in the config file should be set to your local path in .bashrc or .bash_profile. Or, you can set SPARKRCOR_HOME and source the $SPARKRCOR_HOME/config.
 
