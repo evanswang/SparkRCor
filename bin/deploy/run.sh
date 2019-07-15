@@ -256,7 +256,7 @@ done
 for((i=0;i<$((${#HOSTS[@]}));i++))
 do
 	ssh ${HOSTS[${i}]} sudo umount /nfs
-	ssh ${HOSTS[${i}]} sudo mount 192.168.0.21:/nfs /nfs
+	ssh ${HOSTS[${i}]} sudo mount ${NFS_SERVER_IP}:/nfs /nfs
 	if [ "$RET_CODE" -ne 0 ];then
 		echo "!!!Error!!!"
 		echo "mount nfs to cluster"

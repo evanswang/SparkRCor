@@ -30,7 +30,7 @@ export RES=/nfs/results
 export RES_FILE_PRE=/nfs/results/block
 
 # vm names, the first host name must be spark1
-export HOSTS=(spark1 spark2 spark3 spark4 spark5 spark6)
+export HOSTS=(spark1 spark2 spark3 spark4 spark5)
 
 # openstack user
 export USER=sw23
@@ -53,3 +53,6 @@ export SECURITY_GROUP=cloudforms_ext_in
 
 # spark vm key pair name
 export KEY=spark_key
+
+# NFS server ip address
+export NFS_SERVER_IP=192.168.0.6
