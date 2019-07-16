@@ -36,7 +36,7 @@ export HOSTS=(spark1 spark2 spark3 spark4 spark5)
 export USER=sw23
 
 # openstack passwd
-export PASSWD=8abf50cf557512368d7e8384c3513508
+#export PASSWD=8abf50cf557512368d7e8384c3513508
 
 # spark image id
 export TEMPT_ID=4700d6e8-882b-421e-ad55-cf5152486cfe

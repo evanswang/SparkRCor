@@ -12,9 +12,12 @@ source ${SPARKRCOR_HOME}/config
 
 PWD=${SPARKRCOR_HOME}/bin/deploy
 
+read -s -p "Enter your OpenStack password : " PASSWD
+echo ""
+
 # generate a token pass
 
-TOKEN=`curl -i \
+TOKEN=`curl -s -i \
   -H "Content-Type: application/json" \
   -d '
 { "auth": {
@@ -42,6 +45,12 @@ CR=$'\r'
 
 TOKEN="${TOKEN%$CR}"
 
+if [ "${TOKEN}" == "" ]; then
+	echo "Wrong password!"
+	exit 1
+fi
+
 echo ${TOKEN} > ${PWD}/token
   
 # X-Subject-Token is what we need.
+
