@@ -3,8 +3,9 @@
 # Name : get openstack token using user and passwd
 # Author: sw23
 # Date: 13 Mar 2019
-# Function : get openstack token using user and passwd. Please fill your openstack
-#            USER and PASSWD in the config file.
+# Function : get openstack token using user and passwd. 
+# Dependencies:
+#	Please fill your openstack USER in the config file.
 ###################################################################################
 
 

@@ -30,6 +30,28 @@ then
 fi
 
 ###################################
+# check your public key
+###################################
+${PWD}/get_key.sh
+RET_CODE=$?
+if [ "$RET_CODE" -ne 0 ];
+then
+	###################################
+	# post your public key
+	###################################
+	${PWD}/post_key.sh
+	RET_CODE=$?
+	if [ "$RET_CODE" -ne 0 ];
+	then
+		echo "!!!Error!!!"
+		echo "post_key"
+		echo "!!!Error!!!"
+		echo
+		exit 1
+	fi
+fi
+
+###################################
 # read floating ips to IPARRAY
 ###################################
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'IPARRAY=($(cat $PWD/iplist.txt))'
